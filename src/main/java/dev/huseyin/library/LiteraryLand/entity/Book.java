@@ -1,7 +1,8 @@
 package dev.huseyin.library.LiteraryLand.entity;
 
-import jakarta.persistence.*;
 import lombok.Data;
+
+import javax.persistence.*;
 
 @Data
 @Entity
