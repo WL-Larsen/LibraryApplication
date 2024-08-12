@@ -3,15 +3,17 @@ package dev.huseyin.library.LiteraryLand.config;
 import com.okta.spring.boot.oauth.Okta;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.accept.ContentNegotiationStrategy;
 import org.springframework.web.accept.HeaderContentNegotiationStrategy;
-
-import java.util.List;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfiguration {
 
     @Bean
@@ -24,10 +26,11 @@ public class SecurityConfiguration {
         http.authorizeRequests(configurer ->
                         configurer
                                 .antMatchers("/api/books/secure/**",
-                                        "/api/reviews/secure/**")
+                                        "/api/reviews/secure/**",
+                                        "/api/messages/secure/**")
                                 .authenticated())
                 .oauth2ResourceServer()
-                    .jwt();
+                .jwt();
 
         // Add CORS filters
         http.cors();
@@ -40,5 +43,17 @@ public class SecurityConfiguration {
         Okta.configureResourceServer401ResponseBody(http);
 
         return http.build();
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 }

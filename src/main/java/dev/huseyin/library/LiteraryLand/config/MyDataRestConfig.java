@@ -1,6 +1,7 @@
 package dev.huseyin.library.LiteraryLand.config;
 
 import dev.huseyin.library.LiteraryLand.entity.Book;
+import dev.huseyin.library.LiteraryLand.entity.Message;
 import dev.huseyin.library.LiteraryLand.entity.Review;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -23,9 +24,11 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
 
         config.exposeIdsFor(Book.class);
         config.exposeIdsFor(Review.class);
+        config.exposeIdsFor(Message.class);
 
         disableHttpMethods(Book.class, config, theUnsupportedActions);
         disableHttpMethods(Review.class, config, theUnsupportedActions);
+        disableHttpMethods(Message.class, config, theUnsupportedActions);
 
         /* Configure CORS Mapping */
         cors.addMapping("/api/**") // Adjust the path to match your API endpoints
